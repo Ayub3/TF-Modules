@@ -43,7 +43,7 @@ variable "aws_db_subnet_name" {
   default = "db_subnet"
 }
 
-variable "private_rt_name" {
+variable "public_rt_name" {
   type    = string
   default = "public_rt"
 }
