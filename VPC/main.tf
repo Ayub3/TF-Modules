@@ -42,6 +42,7 @@ resource "aws_nat_gateway" "ngw" {
 # Subnets
 
 resource "aws_subnet" "public_subnet" {
+  name              = var.aws_public_subnet_name
   count             = length(var.public_cidr_block)
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.public_cidr_block[count.index]
@@ -50,35 +51,38 @@ resource "aws_subnet" "public_subnet" {
   map_public_ip_on_launch = true
 
   tags = merge(local.tags,
-    { Name = "${aws_subnet.name}-${count.index + 1}" }
+    { Name = "${aws_subnet.public_subnet.name}-${count.index + 1}" }
   )
 }
 
 resource "aws_subnet" "private_subnet" {
+  name              = var.aws_private_subnet_name
   count             = length(var.private_cidr_block)
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.private_cidr_block[count.index]
   availability_zone = var.availability_zone[count.index]
 
   tags = merge(local.tags,
-    { Name = "${aws_subnet.name}-${count.index + 1}" }
+    { Name = "${aws_subnet.private_subnet.name}-${count.index + 1}" }
   )
 }
 
 resource "aws_subnet" "database_subnet" {
+  name              = var.aws_db_subnet_name
   count             = length(var.database_cidr_block)
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = var.database_cidr_block[count.index]
   availability_zone = var.availability_zone[count.index]
 
   tags = merge(local.tags,
-    { Name = "${aws_subnet.name}-${count.index + 1}" }
+    { Name = "${aws_subnet.database_subnet.name}-${count.index + 1}" }
   )
 }
 
 # Route tables
 
 resource "aws_route_table" "public" {
+  name = var.public_rt_name
   count  = length(var.public_cidr_block)
   vpc_id = aws_vpc.vpc.id
 
@@ -88,11 +92,12 @@ resource "aws_route_table" "public" {
   }
 
   tags = merge(local.tags,
-    { Name = "${aws_route_table.name}-rt-${count.index + 1}" }
+    { Name = "${aws_route_table.public.name}-rt-${count.index + 1}" }
   )
 }
 
 resource "aws_route_table" "private" {
+  name = var.private_rt_name
   count  = length(var.private_cidr_block)
   vpc_id = aws_vpc.vpc.id
 
@@ -102,7 +107,7 @@ resource "aws_route_table" "private" {
   }
 
   tags = merge(local.tags,
-    { Name = "${aws_route_table.name}-rt-${count.index + 1}" }
+    { Name = "${aws_route_table.private.name}-rt-${count.index + 1}" }
   )
 }
 

@@ -27,3 +27,28 @@ variable "availability_zone" {
   type    = list(string)
   default = []
 }
+
+variable "aws_public_subnet_name" {
+  type    = string
+  default = "public_subnet"
+}
+
+variable "aws_private_subnet_name" {
+  type    = string
+  default = "private_subnet"
+}
+
+variable "aws_db_subnet_name" {
+  type    = string
+  default = "db_subnet"
+}
+
+variable "private_rt_name" {
+  type    = string
+  default = "public_rt"
+}
+
+variable "private_rt_name" {
+  type    = string
+  default = "private_rt"
+}
